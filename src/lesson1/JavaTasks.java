@@ -105,7 +105,7 @@ public class JavaTasks {
      * 121.3
      */
     //временные затраты: O(N) (сортировка подсчетом)
-    //затраты памяти: S(1) (не зависят от количества температур)
+    //затраты памяти: O(1) (не зависят от количества температур)
     static public void sortTemperatures(String inputName, String outputName) throws IOException {
         int[] positive = new int[5001];
         int[] negative = new int[2731];
@@ -180,7 +180,7 @@ public class JavaTasks {
      * 2
      */
     //временные затраты: O(N)
-    //затраты памяти: S(N)
+    //затраты памяти: O(N)
     static public void sortSequence(String inputName, String outputName) throws IOException {
         List<Integer> numbers = new ArrayList<>();
         Map<Integer, Integer> map = new HashMap<>();
