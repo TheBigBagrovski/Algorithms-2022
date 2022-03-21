@@ -1,11 +1,12 @@
 package lesson3
 
+import org.junit.jupiter.api.assertDoesNotThrow
 import java.util.*
 import kotlin.math.abs
-import kotlin.test.*
-import org.junit.jupiter.api.assertDoesNotThrow
-import kotlin.IllegalStateException
-import kotlin.NoSuchElementException
+import kotlin.test.assertEquals
+import kotlin.test.assertFailsWith
+import kotlin.test.assertFalse
+import kotlin.test.assertTrue
 
 abstract class AbstractBinarySearchTreeTest {
 
@@ -162,6 +163,14 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+        //дополнительный тест
+        val controlSet = mutableSetOf<Int>()
+        val binarySet = create()
+        val toRemove = 0
+        for (element in controlSet) {
+            binarySet += element
+        }
+        assertFalse(binarySet.remove(toRemove))
     }
 
     protected fun doIteratorTest() {
@@ -205,6 +214,31 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+    }
+
+    //дополнительный тест
+    protected fun doAdditionalIteratorTest() {
+        implementationTest { create().iterator().hasNext() }
+        implementationTest { create().iterator().next() }
+        val controlSet = TreeSet<Int>()
+        for (i in 0..100 step 10) {
+            controlSet.add(i)
+        }
+        println("Control set: $controlSet")
+        val binarySet = create()
+        for (element in controlSet) {
+            binarySet += element
+        }
+        val controlIter = controlSet.iterator()
+        val binaryIter = binarySet.iterator()
+        assertEquals(controlIter.hasNext(), binaryIter.hasNext())
+        for (i in 0..10) {
+            assertEquals(controlIter.next(), binaryIter.next())
+        }
+        assertFailsWith<NoSuchElementException>("Something was supposedly returned after the elements ended") {
+            binaryIter.next()
+        }
+        println("All clear!")
     }
 
     protected fun doIteratorRemoveTest() {
@@ -272,6 +306,57 @@ abstract class AbstractBinarySearchTreeTest {
             }
             println("All clear!")
         }
+    }
+
+    //дополнительный тест
+    protected fun doAdditionalIteratorRemoveTest() {
+        implementationTest { create().iterator().remove() }
+        val controlSet = TreeSet<Int>()
+        for (i in 5..15 step 5) controlSet.add(i)
+        println("Initial set: $controlSet")
+        val binarySet = create()
+        for (element in controlSet) binarySet += element
+        for (i in 5..15 step 5) controlSet.remove(i)
+        val iterator = binarySet.iterator()
+        assertFailsWith<IllegalStateException>("Something was supposedly removed before the iteration started") {
+            iterator.remove()
+        }
+        var counter = binarySet.size
+        print("Iterating: ")
+        while (iterator.hasNext()) {
+            val element = iterator.next()
+            print("$element, ")
+            counter--
+            iterator.remove()
+            assertFailsWith<IllegalStateException>("BinarySearchTreeIterator.remove() was successfully called twice in a row.") {
+                iterator.remove()
+            }
+        }
+        assertEquals(
+            0, counter,
+            "BinarySearchTreeIterator.remove() changed iterator position: ${abs(counter)} elements were ${if (counter > 0) "skipped" else "revisited"}."
+        )
+        assertTrue(
+            binarySet.checkInvariant(),
+            "The binary search tree invariant is false after BinarySearchTreeIterator.remove()."
+        )
+        assertEquals(
+            controlSet.size, binarySet.size,
+            "The size of the tree is incorrect: was ${binarySet.size}, should've been ${controlSet.size}."
+        )
+        for (element in controlSet) {
+            assertTrue(
+                binarySet.contains(element),
+                "The tree doesn't have the element $element from the control set."
+            )
+        }
+        for (element in binarySet) {
+            assertTrue(
+                controlSet.contains(element),
+                "The tree has the element $element that is not in control set."
+            )
+        }
+        println("All clear!")
     }
 
     protected fun doSubSetTest() {

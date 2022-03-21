@@ -36,12 +36,16 @@ class BinarySearchTreeTest : AbstractBinarySearchTreeTest() {
     @Tag("5")
     fun iteratorTestJava() {
         doIteratorTest()
+        //дополнительный тест
+        doAdditionalIteratorTest()
     }
 
     @Test
     @Tag("8")
     fun iteratorRemoveTestJava() {
         doIteratorRemoveTest()
+        //дополнительный тест
+        doAdditionalIteratorRemoveTest()
     }
 
     @Test

@@ -1,5 +1,6 @@
 package lesson2
 
+import org.junit.jupiter.api.assertThrows
 import java.io.BufferedWriter
 import java.io.File
 import java.util.*
@@ -46,6 +47,10 @@ abstract class AbstractAlgorithmsTests {
         assertEquals(3 to 4, optimizeBuyAndSell("input/buysell_in1.txt"))
         assertEquals(8 to 12, optimizeBuyAndSell("input/buysell_in2.txt"))
         assertEquals(3 to 4, optimizeBuyAndSell("input/buysell_in3.txt"))
+        //дополнительные тесты
+        assertEquals(0 to 0, optimizeBuyAndSell("input/buysell_in4.txt"))
+        assertEquals(0 to 0, optimizeBuyAndSell("input/buysell_in5.txt"))
+        assertThrows<IllegalArgumentException> { optimizeBuyAndSell("input/buysell_in6.txt") }
         try {
             val expectedAnswer = generatePrices(1000)
             assertEquals(expectedAnswer, optimizeBuyAndSell("temp_prices.txt"))
@@ -120,6 +125,11 @@ abstract class AbstractAlgorithmsTests {
                 File("input/ruslan_ludmila_2.txt").readText()
             ).trim()
         )
+        //дополнительные тесты
+        assertEquals("СЕРВ", longestCommonSubstring("СЕРВАТОР", "СЕРВаТОР"))
+        assertEquals("СЕРВАТОР", longestCommonSubstring("СЕРВАТОР", "СЕРВАТОР"))
+        assertEquals(" ", longestCommonSubstring("аааааааааа аааааааааааа", "бббббббббббб "))
+        assertEquals("", longestCommonSubstring("СЕРВАТОР", ""))
     }
 
     fun calcPrimesNumber(calcPrimesNumber: (Int) -> Int) {
@@ -148,5 +158,8 @@ abstract class AbstractAlgorithmsTests {
         assertEquals(148933, calcPrimesNumber(2000000))
         assertEquals(348513, calcPrimesNumber(5000000))
         assertEquals(664579, calcPrimesNumber(10000000))
+        //дополнительные тесты
+        assertEquals(0, calcPrimesNumber(0))
+        assertEquals(5761455, calcPrimesNumber(100000000))
     }
 }
