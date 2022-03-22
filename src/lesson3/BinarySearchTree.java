@@ -87,7 +87,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
      * <p>
      * Средняя
      */
-    //временные затраты: O(logN) (проходим по бинарному дереву)
+    //временные затраты: O(N) (проходим по бинарному дереву, худший случай - вырожденное дерево)
     //затраты памяти: O(1) (пройденные узлы нигде не хранятся)
     @Override
     public boolean remove(Object o) {
@@ -355,7 +355,7 @@ public class BinarySearchTree<T extends Comparable<T>> extends AbstractSet<T> im
          * <p>
          * Сложная
          */
-        //временные затраты: O(logN) (аналогично функции remove(Object))
+        //временные затраты: O(N) (аналогично функции remove(Object))
         //затраты памяти: O(1) (аналогично функции remove(Object))
         @Override
         public void remove() {
