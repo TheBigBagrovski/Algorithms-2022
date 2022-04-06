@@ -1,21 +1,16 @@
 package lesson4;
 
-import java.util.*;
-import kotlin.NotImplementedError;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+
+import java.util.*;
 
 /**
  * Префиксное дерево для строк
  */
 public class Trie extends AbstractSet<String> implements Set<String> {
 
-    private static class Node {
-        SortedMap<Character, Node> children = new TreeMap<>();
-    }
-
     private final Node root = new Node();
-
     private int size = 0;
 
     @Override
@@ -82,18 +77,71 @@ public class Trie extends AbstractSet<String> implements Set<String> {
         return false;
     }
 
-    /**
-     * Итератор для префиксного дерева
-     *
-     * Спецификация: {@link Iterator} (Ctrl+Click по Iterator)
-     *
-     * Сложная
-     */
     @NotNull
     @Override
     public Iterator<String> iterator() {
-        // TODO
-        throw new NotImplementedError();
+        return new TrieIterator();
+    }
+
+    /**
+     * Итератор для префиксного дерева
+     * <p>
+     * Спецификация: {@link Iterator} (Ctrl+Click по Iterator)
+     * <p>
+     * Сложная
+     */
+
+    private static class Node {
+        Map<Character, Node> children = new LinkedHashMap<>(); //treeSet заменяем на linkedHashMap для уменьшения трудоемкости
+    }
+
+    public class TrieIterator implements Iterator<String> {
+        private final int initialSize;
+        private int nodesPassed;
+        private final List<String> words;
+        private String lastNode;
+
+        //затраты памяти: O(N)
+        private TrieIterator() {
+            nodesPassed = 0;
+            initialSize = size();
+            words = new ArrayList<>();
+            fillWords("", root);
+        }
+
+        //временные затраты: O(1)
+        //затраты памяти: O(1)
+        @Override
+        public boolean hasNext() {
+            return nodesPassed < initialSize;
+        }
+
+        //временные затраты: O(1)
+        //затраты памяти: O(1)
+        @Override
+        public String next() {
+            if (nodesPassed == initialSize || initialSize == 0) throw new NoSuchElementException();
+            lastNode = words.get(nodesPassed);
+            nodesPassed++;
+            return lastNode;
+        }
+
+        //временные затраты: O(maxWordLength)
+        //затраты памяти: O(1)
+        @Override
+        public void remove() {
+            if (lastNode == null) throw new IllegalStateException();
+            Trie.this.remove(lastNode);
+            lastNode = null;
+        }
+
+        private void fillWords(String string, Node root) {
+            for (char character : root.children.keySet()) {
+                if (character != (char) 0) fillWords(string + character, root.children.get(character));
+                else words.add(string);
+            }
+        }
+
     }
 
 }
