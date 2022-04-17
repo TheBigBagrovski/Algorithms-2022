@@ -93,7 +93,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
      * <p>
      * Средняя
      */
-    //временные затраты: O(1 / (1 - A)) --- A - коэффициент заполнения A = n / m (n = число элементов, m = размерность масссива)
+    //временные затраты: O(N)
     //затраты памяти: O(1)
     @Override
     public boolean remove(Object o) {
@@ -145,7 +145,7 @@ public class OpenAddressingSet<T> extends AbstractSet<T> {
             return passed < initialSize;
         }
 
-        //временные затраты: O(1 / (1 - A)) --- A - коэффициент заполнения A = n / m (n = число элементов, m = размерность масссива)
+        //временные затраты: O(N)
         //затраты памяти: O(1)
         @Override
         public T next() {
