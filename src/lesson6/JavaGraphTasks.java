@@ -6,7 +6,6 @@ import lesson6.impl.GraphBuilder;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.Stack;
 
 @SuppressWarnings("unused")
 public class JavaGraphTasks {
@@ -135,27 +134,28 @@ public class JavaGraphTasks {
      * Ответ: A, E, J, K, D, C, H, G, B, F, I
      */
     //временные затраты: O((Vertices!)*Vertices) (т.к. contains() -- O(n))
-    //затраты памяти: O(Vertices!)
+    //затраты памяти: O(Vertices) (т.к. храним только сам путь)
+    private static Path longestPath;
+
     public static Path longestSimplePath(Graph graph) {
-        Path longestPath = new Path();
+        longestPath =  new Path();
         if (graph.getVertices().isEmpty()) return longestPath;
-        Stack<Path> possiblePaths = new Stack<>();
-        // все вершины - возможные стартовые точки для путей
-        for (Graph.Vertex vertex : graph.getVertices()) possiblePaths.add(new Path(vertex));
-        while (!possiblePaths.isEmpty()) {
-            Path current = possiblePaths.pop(); // "снимаем" самый "верхний" путь из стека
-            if (current.getLength() > longestPath.getLength()) longestPath = current;
-            // рассматриваем соседей последней вершины в текущем пути
-            for (Graph.Vertex neighbour : graph.getNeighbors(current.getVertices().get(current.getLength())))
-                // если соседней вершины еще нет в пути, создаем новый возможный путь с этой вершиной
-                // новый путь помещаем на "верх" стека, в новой итерации он будет взят первым
-                // каждый сосед порождает еще один путь для рассмотрения в цикле и все они хранятся в стеке -
-                // - отсюда факториальная трудо- и ресурсоемкость
-                if (!current.contains(neighbour)) possiblePaths.push(new Path(current, graph, neighbour));
+        for (Graph.Vertex vertex : graph.getVertices()) {
+            if(longestPath.getLength()==graph.getVertices().size()) break;
+            recursiveSearch(graph, new Path(vertex), vertex);
         }
         return longestPath;
     }
 
+    private static void recursiveSearch(Graph graph, Path path, Graph.Vertex vertex) {
+        for (Graph.Vertex neighbor : graph.getNeighbors(path.getVertices().get(path.getLength()))) {
+            if(!path.contains(neighbor)) {
+                Path newPath = new Path(path, graph, neighbor);
+                if(newPath.getLength() > longestPath.getLength()) longestPath = newPath;
+                recursiveSearch(graph, newPath, neighbor);
+            }
+        }
+    }
 
     /**
      * Балда
