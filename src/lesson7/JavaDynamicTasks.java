@@ -29,7 +29,7 @@ public class JavaDynamicTasks {
         for (int i = 0; i <= m; i++) {
             for (int j = 0; j <= n; j++) {
                 if (i == 0 || j == 0) lcs_matrix[i][j] = 0;
-                else if (first.toCharArray()[i - 1] == second.toCharArray()[j - 1])
+                else if (first.charAt(i - 1) == second.charAt(j - 1))
                     lcs_matrix[i][j] = lcs_matrix[i - 1][j - 1] + 1;
                 else lcs_matrix[i][j] = max(lcs_matrix[i - 1][j], lcs_matrix[i][j - 1]);
             }

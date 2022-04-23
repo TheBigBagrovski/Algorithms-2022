@@ -92,7 +92,7 @@ public class Trie extends AbstractSet<String> implements Set<String> {
      */
 
     private static class Node {
-        SortedMap<Character, Node> children = new TreeMap<>(); //treeSet заменяем на linkedHashMap для уменьшения трудоемкости
+        SortedMap<Character, Node> children = new TreeMap<>();
     }
 
     public class TrieIterator implements Iterator<String> {

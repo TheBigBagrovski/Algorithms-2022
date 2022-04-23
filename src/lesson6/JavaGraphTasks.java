@@ -68,8 +68,8 @@ public class JavaGraphTasks {
      * |
      * J ------------ K
      */
-    //временные затраты: O(Vertices + Edges)
-    //затраты памяти: O(Vertices + Edges)
+    //временные затраты: O(Vertices * Edges)
+    //затраты памяти: O(Vertices)
     public static Graph minimumSpanningTree(Graph graph) {
         Set<Graph.Vertex> added = new HashSet<>();
         GraphBuilder answer = new GraphBuilder();
@@ -134,7 +134,7 @@ public class JavaGraphTasks {
      * <p>
      * Ответ: A, E, J, K, D, C, H, G, B, F, I
      */
-    //временные затраты: O(Vertices!)
+    //временные затраты: O((Vertices!)*Vertices) (т.к. contains() -- O(n))
     //затраты памяти: O(Vertices!)
     public static Path longestSimplePath(Graph graph) {
         Path longestPath = new Path();
