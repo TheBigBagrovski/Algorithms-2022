@@ -135,26 +135,25 @@ public class JavaGraphTasks {
      */
     //временные затраты: O((Vertices!)*Vertices) (т.к. contains() -- O(n))
     //затраты памяти: O(Vertices) (т.к. храним только сам путь)
-    private static Path longestPath;
-
     public static Path longestSimplePath(Graph graph) {
-        longestPath =  new Path();
+        Path longestPath =  new Path();
         if (graph.getVertices().isEmpty()) return longestPath;
         for (Graph.Vertex vertex : graph.getVertices()) {
             if(longestPath.getLength()==graph.getVertices().size()) break;
-            recursiveSearch(graph, new Path(vertex), vertex);
+            longestPath = recursiveSearch(graph, new Path(vertex), vertex, longestPath);
         }
         return longestPath;
     }
 
-    private static void recursiveSearch(Graph graph, Path path, Graph.Vertex vertex) {
+    private static Path recursiveSearch(Graph graph, Path path, Graph.Vertex vertex, Path longestPath) {
         for (Graph.Vertex neighbor : graph.getNeighbors(path.getVertices().get(path.getLength()))) {
             if(!path.contains(neighbor)) {
                 Path newPath = new Path(path, graph, neighbor);
                 if(newPath.getLength() > longestPath.getLength()) longestPath = newPath;
-                recursiveSearch(graph, newPath, neighbor);
+                longestPath = recursiveSearch(graph, newPath, neighbor, longestPath);
             }
         }
+        return longestPath;
     }
 
     /**
